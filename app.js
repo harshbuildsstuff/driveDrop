@@ -351,6 +351,7 @@ function formatBytes(b) {
   return (b / 1073741824).toFixed(2) + ' GB';
 }
 
+
 let toastTimer;
 function showToast(msg, type = '') {
   const t = document.getElementById('toast');
@@ -359,3 +360,22 @@ function showToast(msg, type = '') {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.className = '', 3500);
 }
+
+function acceptCookies() {
+  localStorage.setItem('cookiesAccepted', 'true');
+  document.getElementById('cookieBar').classList.remove('visible');
+}
+
+function declineCookies() {
+  document.getElementById('cookieBar').classList.remove('visible');
+}
+
+function initCookieBanner() {
+  if (!localStorage.getItem('cookiesAccepted')) {
+    setTimeout(() => {
+      document.getElementById('cookieBar').classList.add('visible');
+    }, 1200);
+  }
+}
+
+initCookieBanner();
