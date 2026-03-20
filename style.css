@@ -225,10 +225,12 @@ header {
   gap: 12px;
   animation: fadeUp 0.7s 0.1s ease both;
   opacity: 0;
+  align-self: stretch;
 }
 
 .info-card {
   padding: 18px 20px;
+  width: 100%;
 }
 
 .info-card.wide {
@@ -1129,6 +1131,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  align-items: stretch;
 }
 
 .achievements-header {
