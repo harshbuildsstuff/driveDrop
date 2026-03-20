@@ -1406,7 +1406,7 @@ header {
   gap: 24px;
   position: relative;
   overflow: hidden;
-  animation: fadeUp 0.7s 0.6s ease both;
+  animation: fadeUp 0.7s 0.15s ease both;
   opacity: 0;
   backdrop-filter: blur(16px);
 }
@@ -1488,8 +1488,8 @@ header {
 }
 
 @keyframes heartbeat {
-  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 6px rgba(255,77,109,0.8)); }
-  30%       { transform: scale(1.25); filter: drop-shadow(0 0 12px rgba(255,77,109,1)); }
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 6px rgba(255,77,109,0.79)); }
+  30%       { transform: scale(1.28); filter: drop-shadow(0 0 12px rgba(255,77,109,1)); }
   60%       { transform: scale(1.1);  filter: drop-shadow(0 0 8px rgba(255,77,109,0.9)); }
 }
 
@@ -1548,4 +1548,70 @@ header {
 
 .footer-link:hover svg {
   opacity: 1;
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .app {
+    padding: 20px 24px 40px;
+    gap: 14px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .info-card.wide {
+    grid-column: span 1;
+  }
+
+  #dropzone {
+    min-height: 130px;
+    padding: 24px;
+  }
+
+  .drop-icon {
+    font-size: 30px;
+  }
+
+  .drop-title {
+    font-size: 13px;
+  }
+
+  .drop-sub {
+    font-size: 10px;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .site-footer {
+    padding: 16px 20px;
+  }
+
+  .footer-divider {
+    height: 36px;
+  }
+}
+
+@media (min-width: 620px) {
+  .app {
+    padding: 40px 32px 80px;
+  }
+
+  .drop-title {
+    font-size: 18px;
+  }
+
+  .info-value {
+    font-size: 26px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+  }
 }
