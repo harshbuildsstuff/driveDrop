@@ -1549,69 +1549,153 @@ header {
 .footer-link:hover svg {
   opacity: 1;
 }
-@media (max-height: 500px) and (orientation: landscape) {
-  .app {
-    padding: 20px 24px 40px;
-    gap: 14px;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
-  .info-card.wide {
-    grid-column: span 1;
-  }
-
-  #dropzone {
-    min-height: 130px;
-    padding: 24px;
-  }
-
-  .drop-icon {
-    font-size: 30px;
-  }
-
-  .drop-title {
-    font-size: 13px;
-  }
-
-  .drop-sub {
-    font-size: 10px;
-  }
-
-  .stats-row {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-  }
-
-  .stat-value {
-    font-size: 16px;
-  }
-
-  .site-footer {
-    padding: 16px 20px;
-  }
-
-  .footer-divider {
-    height: 36px;
-  }
+@media (max-width: 430px) {
+  .app { padding: 24px 14px 60px; gap: 14px; max-width: 100%; }
+  .logo-text { font-size: 15px; }
+  #authBtn { font-size: 9px; padding: 7px 13px; }
+  .info-value { font-size: 18px; }
+  .stat-value { font-size: 17px; }
+  .drop-title { font-size: 14px; }
+  .drop-sub { font-size: 11px; }
+  .stats-row { gap: 8px; }
+  .stat-card { padding: 13px 11px; }
+  .stat-label { font-size: 8px; }
+  .cookie-bar { flex-wrap: wrap; gap: 10px; }
+  .cookie-text { font-size: 10px; }
+  .footer-left { width: 38%; }
+  .footer-logo-text { font-size: 12px; }
+  .footer-link { font-size: 9px; }
 }
 
-@media (min-width: 620px) {
-  .app {
-    padding: 40px 32px 80px;
-  }
+@media (max-width: 360px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .info-card.wide { grid-column: span 1; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .drop-title { font-size: 13px; }
+}
 
-  .drop-title {
-    font-size: 18px;
-  }
+@media (max-height: 500px) and (orientation: landscape) {
+  .app { max-width: 100%; padding: 14px 20px 24px; gap: 12px; }
+  .tab-bar { max-width: 100%; }
+  #tabDashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+  .info-grid { grid-column: 1; grid-row: 1; gap: 8px; }
+  .folder-bar { grid-column: 1; grid-row: 2; animation: none; opacity: 1; padding: 10px 14px; }
+  .stats-row { grid-column: 1; grid-row: 3; animation: none; opacity: 1; gap: 8px; }
+  .dropzone-wrapper { grid-column: 2; grid-row: 1 / span 3; animation: none; opacity: 1; }
+  .queue-wrapper { grid-column: 2; grid-row: 4; animation: none; opacity: 1; }
+  .site-footer { grid-column: 1 / span 2; padding: 14px 18px; }
+  #tabAchievements { grid-column: 1 / span 2; }
+  #dropzone { min-height: 180px; padding: 20px; }
+  .drop-icon { font-size: 28px; }
+  .drop-title { font-size: 12px; }
+  .drop-sub { font-size: 10px; }
+  .info-value { font-size: 16px; }
+  .info-label { font-size: 8px; }
+  .stat-value { font-size: 15px; }
+  .stat-label { font-size: 8px; }
+  .stat-card { padding: 10px 10px; }
+  .footer-divider { height: 32px; }
+  .folder-emoji { font-size: 16px; }
+  .folder-name { font-size: 12px; }
+}
 
-  .info-value {
-    font-size: 26px;
-  }
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  .app { max-width: 700px; padding: 44px 32px 80px; gap: 22px; }
+  .logo-text { font-size: 20px; }
+  .logo-icon { width: 46px; height: 46px; font-size: 22px; }
+  #authBtn { font-size: 11px; padding: 10px 20px; }
+  .info-value { font-size: 26px; }
+  .info-label { font-size: 10px; }
+  .drop-icon { font-size: 52px; }
+  .drop-title { font-size: 20px; }
+  .drop-sub { font-size: 13px; }
+  #dropzone { min-height: 240px; padding: 48px 28px; }
+  .stat-value { font-size: 26px; }
+  .stat-label { font-size: 10px; }
+  .stat-card { padding: 20px 18px; }
+  .stats-row { gap: 14px; }
+  .folder-name { font-size: 16px; }
+  .folder-emoji { font-size: 26px; }
+  .tab-btn { font-size: 11px; padding: 12px 18px; }
+  .ach-card-name { font-size: 13px; }
+  .ach-card-desc { font-size: 12px; }
+  .ach-card-icon { font-size: 34px; }
+  .site-footer { padding: 28px 28px; }
+  .footer-logo-text { font-size: 16px; }
+  .footer-made { font-size: 13px; }
+  .footer-link { font-size: 12px; }
+}
 
-  .stat-value {
-    font-size: 24px;
-  }
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .app { max-width: 100%; padding: 40px 48px 80px; }
+  header, .tab-bar, #tabAchievements, .site-footer { max-width: 1100px; align-self: center; width: 100%; }
+  #tabDashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; max-width: 1100px; align-self: center; width: 100%; }
+  .info-grid { grid-column: 1; grid-row: 1; }
+  .folder-bar { grid-column: 1; grid-row: 2; animation: none; opacity: 1; }
+  .stats-row { grid-column: 1; grid-row: 3; animation: none; opacity: 1; }
+  .queue-wrapper { grid-column: 1; grid-row: 4; animation: none; opacity: 1; }
+  .dropzone-wrapper { grid-column: 2; grid-row: 1 / span 4; animation: none; opacity: 1; }
+  #dropzone { min-height: 340px; }
+  #tabAchievements { max-width: 1100px; align-self: center; width: 100%; }
+  .drop-icon { font-size: 52px; }
+  .drop-title { font-size: 20px; }
+  .drop-sub { font-size: 13px; }
+  .info-value { font-size: 24px; }
+  .stat-value { font-size: 24px; }
+  .ach-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+@media (min-width: 1281px) and (max-width: 1440px) {
+  .app { max-width: 100%; padding: 44px 80px 80px; }
+  header, .tab-bar, #tabAchievements, .site-footer { max-width: 1240px; align-self: center; width: 100%; }
+  #tabDashboard { display: grid; grid-template-columns: 420px 1fr; gap: 24px; align-items: start; max-width: 1240px; align-self: center; width: 100%; }
+  .info-grid { grid-column: 1; grid-row: 1; }
+  .folder-bar { grid-column: 1; grid-row: 2; animation: none; opacity: 1; }
+  .stats-row { grid-column: 1; grid-row: 3; animation: none; opacity: 1; }
+  .queue-wrapper { grid-column: 1; grid-row: 4; animation: none; opacity: 1; }
+  .dropzone-wrapper { grid-column: 2; grid-row: 1 / span 4; animation: none; opacity: 1; }
+  #dropzone { min-height: 420px; }
+  .drop-icon { font-size: 60px; }
+  .drop-title { font-size: 22px; }
+  .drop-sub { font-size: 14px; }
+  .info-value { font-size: 26px; }
+  .stat-value { font-size: 26px; }
+  .ach-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+@media (min-width: 1441px) {
+  .app { max-width: 100%; padding: 56px 120px 100px; }
+  header, .tab-bar, #tabAchievements, .site-footer { max-width: 1600px; align-self: center; width: 100%; }
+  #tabDashboard { display: grid; grid-template-columns: 480px 1fr; gap: 32px; align-items: start; max-width: 1600px; align-self: center; width: 100%; }
+  .info-grid { grid-column: 1; grid-row: 1; }
+  .folder-bar { grid-column: 1; grid-row: 2; animation: none; opacity: 1; }
+  .stats-row { grid-column: 1; grid-row: 3; animation: none; opacity: 1; }
+  .queue-wrapper { grid-column: 1; grid-row: 4; animation: none; opacity: 1; }
+  .dropzone-wrapper { grid-column: 2; grid-row: 1 / span 4; animation: none; opacity: 1; }
+  #dropzone { min-height: 500px; }
+  .drop-icon { font-size: 68px; }
+  .drop-title { font-size: 24px; }
+  .drop-sub { font-size: 15px; }
+  .info-value { font-size: 30px; }
+  .stat-value { font-size: 30px; }
+  .logo-text { font-size: 20px; }
+  .logo-icon { width: 48px; height: 48px; font-size: 24px; }
+  #authBtn { font-size: 12px; padding: 11px 22px; }
+  .ach-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .site-footer { padding: 32px 36px; }
+  .footer-logo-text { font-size: 18px; }
+  .footer-link { font-size: 13px; }
+  .footer-made { font-size: 14px; }
+}
+
+@media (min-width: 1024px) and (max-aspect-ratio: 4/3) {
+  #dropzone { min-height: 280px; }
+  .ach-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+@media (min-width: 600px) and (max-aspect-ratio: 1/1) and (min-aspect-ratio: 9/10) {
+  .app { padding: 30px 20px 60px; }
+  #tabDashboard { display: flex; flex-direction: column; }
+  .dropzone-wrapper { animation: none; opacity: 1; }
+  #dropzone { min-height: 200px; }
 }
