@@ -65,7 +65,115 @@ let uploadFolderId = null;
 let uploadFolderName = DEFAULT_FOLDER_NAME;
 let uploadedCount = 0;
 let totalBytes = 0;
+let sessionMaxDrop = 0;
 
+const ACHIEVEMENTS = [
+  { id: 'first_contact', icon: '🛸', name: 'First Contact', desc: 'Upload your very first file', category: 'milestones', check: (s) => s.totalFiles >= 1 },
+  { id: 'signal_established', icon: '📡', name: 'Signal Established', desc: 'Upload 10 files total', category: 'milestones', check: (s) => s.totalFiles >= 10 },
+  { id: 'deep_space_carrier', icon: '🌌', name: 'Deep Space Carrier', desc: 'Upload 50 files total', category: 'milestones', check: (s) => s.totalFiles >= 50 },
+  { id: 'interstellar_hauler', icon: '🚀', name: 'Interstellar Hauler', desc: 'Upload 100 files total', category: 'milestones', check: (s) => s.totalFiles >= 100 },
+  { id: 'spark', icon: '⚡', name: 'Spark', desc: 'Transmit 100 MB total', category: 'data', check: (s) => s.totalBytes >= 100 * 1024 * 1024 },
+  { id: 'comet', icon: '🌠', name: 'Comet', desc: 'Transmit 1 GB total', category: 'data', check: (s) => s.totalBytes >= 1024 * 1024 * 1024 },
+  { id: 'planetary_mass', icon: '🪐', name: 'Planetary Mass', desc: 'Transmit 10 GB total', category: 'data', check: (s) => s.totalBytes >= 10 * 1024 * 1024 * 1024 },
+  { id: 'stellar_core', icon: '☀️', name: 'Stellar Core', desc: 'Transmit 50 GB total', category: 'data', check: (s) => s.totalBytes >= 50 * 1024 * 1024 * 1024 },
+  { id: 'night_shift', icon: '🌙', name: 'Night Shift', desc: 'Upload a file between midnight and 5 AM', category: 'fun', check: (s) => s.nightShift === true },
+  { id: 'cargo_bay', icon: '🗂️', name: 'Cargo Bay Full', desc: 'Drop 3 or more files at once', category: 'fun', check: (s) => s.maxDrop >= 3 },
+  { id: 'declutter', icon: '🧹', name: 'Declutter', desc: 'Upload 1 GB in a single day', category: 'fun', check: (s) => s.dailyBytes >= 1024 * 1024 * 1024 }
+];
+
+function loadStats() {
+  try { return JSON.parse(localStorage.getItem('drivedrop_stats') || '{}'); }
+  catch (e) { return {}; }
+}
+
+function saveStats(stats) {
+  localStorage.setItem('drivedrop_stats', JSON.stringify(stats));
+}
+
+function loadUnlocked() {
+  try { return JSON.parse(localStorage.getItem('drivedrop_unlocked') || '[]'); }
+  catch (e) { return []; }
+}
+
+function saveUnlocked(list) {
+  localStorage.setItem('drivedrop_unlocked', JSON.stringify(list));
+}
+
+let achievementQueue = [];
+let achievementShowing = false;
+
+function checkAchievements(stats) {
+  const unlocked = loadUnlocked();
+  ACHIEVEMENTS.forEach(a => {
+    if (!unlocked.includes(a.id) && a.check(stats)) {
+      unlocked.push(a.id);
+      achievementQueue.push(a);
+    }
+  });
+  saveUnlocked(unlocked);
+  updateAchievementUI();
+  if (!achievementShowing) drainAchievementQueue();
+}
+
+function drainAchievementQueue() {
+  if (achievementQueue.length === 0) { achievementShowing = false; return; }
+  achievementShowing = true;
+  showAchievementOverlay(achievementQueue.shift());
+}
+
+function showAchievementOverlay(a) {
+  document.getElementById('aubIcon').textContent = a.icon;
+  document.getElementById('aubName').textContent = a.name;
+  document.getElementById('aubDesc').textContent = a.desc;
+  document.getElementById('achievementOverlay').classList.add('open');
+}
+
+function closeAchievementOverlay() {
+  document.getElementById('achievementOverlay').classList.remove('open');
+  setTimeout(drainAchievementQueue, 400);
+}
+
+function updateAchievementUI() {
+  const unlocked = loadUnlocked();
+  const total = ACHIEVEMENTS.length;
+  const count = unlocked.length;
+  document.getElementById('achProgressPill').textContent = `${count} / ${total} Unlocked`;
+  document.getElementById('achProgressBar').style.width = (count / total * 100) + '%';
+  const badge = document.getElementById('achievementBadge');
+  if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
+  renderAchievementGrid('achGridMilestones', 'milestones', unlocked);
+  renderAchievementGrid('achGridData', 'data', unlocked);
+  renderAchievementGrid('achGridFun', 'fun', unlocked);
+}
+
+function renderAchievementGrid(gridId, category, unlocked) {
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = '';
+  ACHIEVEMENTS.filter(a => a.category === category).forEach(a => {
+    const isUnlocked = unlocked.includes(a.id);
+    const card = document.createElement('div');
+    card.className = 'ach-card panel ' + (isUnlocked ? 'unlocked' : 'locked');
+    card.innerHTML = `
+      <div class="ach-card-icon">${a.icon}</div>
+      <div class="ach-card-name">${a.name}</div>
+      <div class="ach-card-desc">${a.desc}</div>
+      <div class="ach-card-status">${isUnlocked ? '✓ Unlocked' : 'Locked'}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+  if (tab === 'dashboard') {
+    document.getElementById('tabDashboard').classList.remove('hidden');
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+  } else {
+    document.getElementById('tabAchievements').classList.remove('hidden');
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    updateAchievementUI();
+  }
+}
 function handleAuth() {
   if (accessToken) {
     signOut();
@@ -252,6 +360,7 @@ function handleFiles(files) {
   if (!accessToken) { showToast('Connect first', 'error'); return; }
   if (!uploadFolderId) { showToast('Folder not ready yet…', 'error'); return; }
   if (!files.length) return;
+  if (files.length > sessionMaxDrop) sessionMaxDrop = files.length;
 
   document.getElementById('queueWrapper').classList.remove('hidden');
   files.forEach(file => {
@@ -286,6 +395,20 @@ function uploadFile(file, cardId) {
   stEl.textContent = 'TX';
   stEl.className = 'file-status uploading';
 
+function recordUpload(fileSize) {
+  const stats = loadStats();
+  stats.totalFiles = (stats.totalFiles || 0) + 1;
+  stats.totalBytes = (stats.totalBytes || 0) + fileSize;
+  stats.maxDrop = Math.max(stats.maxDrop || 0, sessionMaxDrop);
+  const hour = new Date().getHours();
+  if (hour >= 0 && hour < 5) stats.nightShift = true;
+  const today = new Date().toDateString();
+  if (stats.dailyDate !== today) { stats.dailyDate = today; stats.dailyBytes = 0; }
+  stats.dailyBytes = (stats.dailyBytes || 0) + fileSize;
+  saveStats(stats);
+  checkAchievements(stats);
+}
+
   const metadata = {
     name: file.name,
     mimeType: file.type || 'application/octet-stream',
@@ -310,6 +433,7 @@ function uploadFile(file, cardId) {
       stEl.className = 'file-status done';
       barEl.style.width = '100%';
       uploadedCount++;
+      recordUpload(file.size);
       updateStats();
       showToast('✓ Beamed: ' + file.name, 'success');
       loadDriveInfo();
@@ -377,7 +501,7 @@ function initCookieBanner() {
     }, 1200);
   }
 }
-
+updateAchievementUI();
 initCookieBanner();
 
 window.addEventListener('load', () => {
