@@ -379,3 +379,21 @@ function initCookieBanner() {
 }
 
 initCookieBanner();
+
+window.addEventListener('load', () => {
+  if (localStorage.getItem('cookiesAccepted')) {
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      prompt: '',
+      callback: async (resp) => {
+        if (resp.error) return;
+        accessToken = resp.access_token;
+        setSignedIn(true);
+        await loadDriveInfo();
+        await ensureDefaultFolder();
+      }
+    });
+    client.requestAccessToken();
+  }
+});
